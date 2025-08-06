@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinLearn - Gamified Finance Education</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: var(--dark-color);
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>');
+            background-size: 20px 20px;
+            opacity: 0.2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .btn-custom {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-custom:hover {
+            background-color: #d97706;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            color: white;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 15px 20px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+
+        .stock-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .stock-item:last-child {
+            border-bottom: none;
+        }
+
+        .stock-symbol {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .stock-name {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .stock-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .stock-change {
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .positive {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--success-color);
+        }
+
+        .negative {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--danger-color);
+        }
+
+        .quiz-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--dark-color);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: white;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--secondary-color);
+            background-color: #f0f9ff;
+        }
+
+        .quiz-option.selected {
+            border-color: var(--secondary-color);
+            background-color: #dbeafe;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger-color);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .simulator-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .simulator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .balance-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .portfolio-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .portfolio-item:last-child {
+            border-bottom: none;
+        }
+
+        .portfolio-symbol {
+            font-weight: 700;
+        }
+
+        .portfolio-shares {
+            color: #6b7280;
+        }
+
+        .portfolio-value {
+            font-weight: 600;
+        }
+
+        .news-item {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100px;
+        }
+
+        .badge-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .badge-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .achievement-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .achievement-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .achievement-message {
+            margin-bottom: 15px;
+        }
+
+        .achievement-coins {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .achievement-coins i {
+            margin-right: 5px;
+        }
+
+        .close-achievement {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 15px;
+        }
+
+        .user-info h3 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .user-info p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .tab-container {
+            margin-top: 30px;
+        }
+
+        .nav-tabs {
+            border-bottom: none;
+            margin-bottom: 20px;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #6b7280;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            background-color: white;
+            border-radius: 0 0 12px 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 50px 0 30px;
+            margin-top: 80px;
+        }
+
+        .footer-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="bi bi-currency-dollar"></i> FinLearn</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#market">Market</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#learn">Learn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#games">Games</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#news">News</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container hero-content">
+            <h1 class="hero-title">Learn Finance Through Play</h1>
+            <p class="hero-subtitle">Master financial literacy with our interactive games, quizzes, and real-time market data. Earn coins, unlock achievements, and become a finance expert!</p>
+            <a href="#dashboard" class="btn btn-custom btn-lg">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Your Dashboard</h2>
+            
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            User Profile
+                        </div>
+                        <div class="card-body">
+                            <div class="user-profile">
+                                <div class="user-avatar">JD</div>
+                                <div class="user-info">
+                                    <h3>John Doe</h3>
+                                    <p>Finance Enthusiast</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stats-container">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="user-coins">1250</div>
+                                    <div class="stat-label">Coins</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="user-level">5</div>
+                                    <div class="stat-label">Level</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="user-badges">8</div>
+                                    <div class="stat-label">Badges</div>
+                                </div>
+                            </div>
+                            
+                            <div class="badge-container">
+                                <div class="badge-item">
+                                    <div class="badge-icon">
+                                        <i class="bi bi-star-fill"></i>
+                                    </div>
+                                    <div class="badge-name">Beginner</div>
+                                </div>
+                                <div class="badge-item">
+                                    <div class="badge-icon">
+                                        <i class="bi bi-lightning-fill"></i>
+                                    </div>
+                                    <div class="badge-name">Quick Learner</div>
+                                </div>
+                                <div class="badge-item">
+                                    <div class="badge-icon">
+                                        <i class="bi bi-trophy-fill"></i>
+                                    </div>
+                                    <div class="badge-name">Quiz Master</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-8 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Investment Simulator
+                        </div>
+                        <div class="card-body">
+                            <div class="simulator-container">
+                                <div class="simulator-header">
+                                    <h4>Virtual Portfolio</h4>
+                                    <div class="balance-display">
+                                        Balance: $<span id="simulator-balance">10,000.00</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Symbol</th>
+                                                <th>Shares</th>
+                                                <th>Price</th>
+                                                <th>Value</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="portfolio-table">
+                                            <tr>
+                                                <td class="portfolio-symbol">AAPL</td>
+                                                <td class="portfolio-shares">10</td>
+                                                <td class="portfolio-price">$175.25</td>
+                                                <td class="portfolio-value">$1,752.50</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-danger">Sell</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="portfolio-symbol">MSFT</td>
+                                                <td class="portfolio-shares">5</td>
+                                                <td class="portfolio-price">$335.60</td>
+                                                <td class="portfolio-value">$1,678.00</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-danger">Sell</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <h5>Available Stocks</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Symbol</th>
+                                                    <th>Name</th>
+                                                    <th>Price</th>
+                                                    <th>Change</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="available-stocks">
+                                                <tr>
+                                                    <td>GOOGL</td>
+                                                    <td>Alphabet Inc.</td>
+                                                    <td>$142.56</td>
+                                                    <td><span class="stock-change positive">+1.25%</span></td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary">Buy</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>AMZN</td>
+                                                    <td>Amazon.com Inc.</td>
+                                                    <td>$178.22</td>
+                                                    <td><span class="stock-change negative">-0.75%</span></td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary">Buy</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TSLA</td>
+                                                    <td>Tesla Inc.</td>
+                                                    <td>$248.50</td>
+                                                    <td><span class="stock-change positive">+2.15%</span></td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary">Buy</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section id="market" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Market Data</h2>
+            
+            <div class="row">
+                <div class="col-lg-8 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Real-Time Stock Prices
+                        </div>
+                        <div class="card-body">
+                            <div id="stock-ticker">
+                                <div class="stock-item">
+                                    <div>
+                                        <div class="stock-symbol">AAPL</div>
+                                        <div class="stock-name">Apple Inc.</div>
+                                    </div>
+                                    <div>
+                                        <div class="stock-price">$175.25</div>
+                                        <div class="stock-change positive">+1.25%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div>
+                                        <div class="stock-symbol">MSFT</div>
+                                        <div class="stock-name">Microsoft Corp.</div>
+                                    </div>
+                                    <div>
+                                        <div class="stock-price">$335.60</div>
+                                        <div class="stock-change positive">+0.85%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div>
+                                        <div class="stock-symbol">GOOGL</div>
+                                        <div class="stock-name">Alphabet Inc.</div>
+                                    </div>
+                                    <div>
+                                        <div class="stock-price">$142.56</div>
+                                        <div class="stock-change positive">+1.25%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div>
+                                        <div class="stock-symbol">AMZN</div>
+                                        <div class="stock-name">Amazon.com Inc.</div>
+                                    </div>
+                                    <div>
+                                        <div class="stock-price">$178.22</div>
+                                        <div class="stock-change negative">-0.75%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div>
+                                        <div class="stock-symbol">TSLA</div>
+                                        <div class="stock-name">Tesla Inc.</div>
+                                    </div>
+                                    <div>
+                                        <div class="stock-price">$248.50</div>
+                                        <div class="stock-change positive">+2.15%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div>
+                                        <div class="stock-symbol">META</div>
+                                        <div class="stock-name">Meta Platforms Inc.</div>
+                                    </div>
+                                    <div>
+                                        <div class="stock-price">$485.75</div>
+                                        <div class="stock-change positive">+0.45%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div>
+                                        <div class="stock-symbol">NVDA</div>
+                                        <div class="stock-name">NVIDIA Corp.</div>
+                                    </div>
+                                    <div>
+                                        <div class="stock-price">$875.28</div>
+                                        <div class="stock-change positive">+3.25%</div>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div>
+                                        <div class="stock-symbol">JPM</div>
+                                        <div class="stock-name">JPMorgan Chase & Co.</div>
+                                    </div>
+                                    <div>
+                                        <div class="stock-price">$197.45</div>
+                                        <div class="stock-change negative">-0.35%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Market Overview
+                        </div>
+                        <div class="card-body">
+                            <div class="stock-item">
+                                <div>
+                                    <div class="stock-symbol">S&P 500</div>
+                                    <div class="stock-name">S&P 500 Index</div>
+                                </div>
+                                <div>
+                                    <div class="stock-price">5,234.18</div>
+                                    <div class="stock-change positive">+0.68%</div>
+                                </div>
+                            </div>
+                            <div class="stock-item">
+                                <div>
+                                    <div class="stock-symbol">DOW</div>
+                                    <div class="stock-name">Dow Jones</div>
+                                </div>
+                                <div>
+                                    <div class="stock-price">39,512.84</div>
+                                    <div class="stock-change positive">+0.45%</div>
+                                </div>
+                            </div>
+                            <div class="stock-item">
+                                <div>
+                                    <div class="stock-symbol">NASDAQ</div>
+                                    <div class="stock-name">NASDAQ Composite</div>
+                                </div>
+                                <div>
+                                    <div class="stock-price">16,369.41</div>
+                                    <div class="stock-change positive">+0.85%</div>
+                                </div>
+                            </div>
+                            <div class="stock-item">
+                                <div>
+                                    <div class="stock-symbol">VIX</div>
+                                    <div class="stock-name">Volatility Index</div>
+                                </div>
+                                <div>
+                                    <div class="stock-price">13.45</div>
+                                    <div class="stock-change negative">-2.15%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learn Section -->
+    <section id="learn" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Learning Center</h2>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Financial Literacy Quiz
+                        </div>
+                        <div class="card-body">
+                            <div class="quiz-container">
+                                <div class="quiz-question" id="quiz-question">
+                                    What is the recommended percentage of income to save for emergencies?
+                                </div>
+                                <div class="quiz-options" id="quiz-options">
+                                    <div class="quiz-option" data-answer="0">5-10%</div>
+                                    <div class="quiz-option" data-answer="1">10-15%</div>
+                                    <div class="quiz-option" data-answer="2">15-20%</div>
+                                    <div class="quiz-option" data-answer="3">20-30%</div>
+                                </div>
+                                <button class="btn btn-custom w-100" id="submit-quiz">Submit Answer</button>
+                                <div id="quiz-result" class="mt-3 d-none">
+                                    <div class="alert alert-success">
+                                        <strong>Correct!</strong> Financial experts typically recommend saving 15-20% of your income for emergencies.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Learning Resources
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-container">
+                                <ul class="nav nav-tabs" id="learningTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button">Articles</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="videos-tab" data-bs-toggle="tab" data-bs-target="#videos" type="button">Videos</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="tools-tab" data-bs-toggle="tab" data-bs-target="#tools" type="button">Tools</button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="learningTabsContent">
+                                    <div class="tab-pane fade show active" id="articles" role="tabpanel">
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1">Understanding Compound Interest</h5>
+                                                    <small>3 days ago</small>
+                                                </div>
+                                                <p class="mb-1">Learn how compound interest can help you grow your wealth over time.</p>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1">Budgeting Basics</h5>
+                                                    <small>1 week ago</small>
+                                                </div>
+                                                <p class="mb-1">Master the fundamentals of creating and sticking to a budget.</p>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1">Investing for Beginners</h5>
+                                                    <small>2 weeks ago</small>
+                                                </div>
+                                                <p class="mb-1">A comprehensive guide to start your investment journey.</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="videos" role="tabpanel">
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1">Stock Market 101</h5>
+                                                    <small>15 min</small>
+                                                </div>
+                                                <p class="mb-1">An introduction to how the stock market works.</p>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1">Retirement Planning</h5>
+                                                    <small>22 min</small>
+                                                </div>
+                                                <p class="mb-1">Strategies to plan for a comfortable retirement.</p>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1">Tax-Saving Tips</h5>
+                                                    <small>18 min</small>
+                                                </div>
+                                                <p class="mb-1">Learn how to legally minimize your tax burden.</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tools" role="tabpanel">
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <h5 class="mb-1">Compound Interest Calculator</h5>
+                                                <p class="mb-1">Calculate how your investments will grow over time.</p>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <h5 class="mb-1">Budget Planner</h5>
+                                                <p class="mb-1">Create a personalized budget based on your income and expenses.</p>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <h5 class="mb-1">Retirement Calculator</h5>
+                                                <p class="mb-1">Estimate how much you need to save for retirement.</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Finance Games</h2>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <i class="bi bi-lightning-charge-fill"></i> Budget Challenge
+                        </div>
+                        <div class="card-body">
+                            <p>Test your budgeting skills by managing a monthly income and expenses. Can you stay within budget and save money?</p>
+                            <button class="btn btn-custom w-100">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <i class="bi bi-graph-up"></i> Stock Prediction
+                        </div>
+                        <div class="card-body">
+                            <p>Predict whether stocks will go up or down. The more accurate your predictions, the more coins you earn!</p>
+                            <button class="btn btn-custom w-100">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <i class="bi bi-cash-coin"></i> Financial Trivia
+                        </div>
+                        <div class="card-body">
+                            <p>Answer trivia questions about personal finance, investing, and economics. Earn coins for each correct answer!</p>
+                            <button class="btn btn-custom w-100">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <i class="bi bi-piggy-bank-fill"></i> Savings Goal
+                        </div>
+                        <div class="card-body">
+                            <p>Set savings goals and make decisions to reach them. Learn about the importance of saving and compound interest.</p>
+                            <button class="btn btn-custom w-100">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <i class="bi bi-currency-bitcoin"></i> Crypto Explorer
+                        </div>
+                        <div class="card-body">
+                            <p>Learn about cryptocurrencies and blockchain technology through interactive challenges and simulations.</p>
+                            <button class="btn btn-custom w-100">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <i class="bi bi-briefcase-fill"></i> Investment Simulator
+                        </div>
+                        <div class="card-body">
+                            <p>Build and manage a virtual investment portfolio. Learn about diversification, risk management, and investment strategies.</p>
+                            <button class="btn btn-custom w-100">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Financial News</h2>
+            
+            <div class="row">
+                <div class="col-lg-8 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Latest News
+                        </div>
+                        <div class="card-body">
+                            <div class="news-item">
+                                <div class="news-title">Federal Reserve Holds Interest Rates Steady, Signals Possible Cuts Later This Year</div>
+                                <div class="news-meta">
+                                    <span>Reuters</span>
+                                    <span>2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="news-item">
+                                <div class="news-title">Tech Stocks Rally as AI Investments Show Strong Returns</div>
+                                <div class="news-meta">
+                                    <span>Bloomberg</span>
+                                    <span>4 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="news-item">
+                                <div class="news-title">Global Markets React to New Trade Agreement Between Major Economies</div>
+                                <div class="news-meta">
+                                    <span>Financial Times</span>
+                                    <span>6 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="news-item">
+                                <div class="news-title">Cryptocurrency Market Sees Surge in Institutional Investment</div>
+                                <div class="news-meta">
+                                    <span>CoinDesk</span>
+                                    <span>8 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="news-item">
+                                <div class="news-title">Housing Market Shows Signs of Cooling as Mortgage Rates Rise</div>
+                                <div class="news-meta">
+                                    <span>Wall Street Journal</span>
+                                    <span>1 day ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Market Analysis
+                        </div>
+                        <div class="card-body">
+                            <div class="news-item">
+                                <div class="news-title">Weekly Market Outlook: Volatility Expected as Earnings Season Begins</div>
+                                <div class="news-meta">
+                                    <span>MarketWatch</span>
+                                    <span>3 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="news-item">
+                                <div class="news-title">Analyst Upgrades: These Stocks Poised for Growth</div>
+                                <div class="news-meta">
+                                    <span>Investing.com</span>
+                                    <span>5 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="news-item">
+                                <div class="news-title">Economic Calendar: Key Events to Watch This Week</div>
+                                <div class="news-meta">
+                                    <span>Yahoo Finance</span>
+                                    <span>1 day ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h3 class="footer-title">FinLearn</h3>
+                    <p>Making finance education fun and accessible for everyone through gamification and interactive learning.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li><a href="#market">Market</a></li>
+                        <li><a href="#learn">Learn</a></li>
+                        <li><a href="#games">Games</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="footer-title">Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Newsletter</h5>
+                    <p>Subscribe to our newsletter for the latest financial tips and market updates.</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email address">
+                            <button class="btn btn-custom" type="button">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 FinLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievement-popup">
+        <button class="close-achievement" id="close-achievement">&times;</button>
+        <div class="achievement-header">
+            <div class="achievement-icon">
+                <i class="bi bi-trophy-fill"></i>
+            </div>
+            <div class="achievement-title">Achievement Unlocked!</div>
+        </div>
+        <div class="achievement-message">
+            You've earned the <strong>Quiz Master</strong> badge!
+        </div>
+        <div class="achievement-coins">
+            <i class="bi bi-coin"></i> +100 Coins
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample data for the application
+        const userData = {
+            name: "John Doe",
+            initials: "JD",
+            coins: 1250,
+            level: 5,
+            badges: 8,
+            balance: 10000,
+            portfolio: [
+                { symbol: "AAPL", shares: 10, price: 175.25 },
+                { symbol: "MSFT", shares: 5, price: 335.60 }
+            ]
+        };
+
+        const stockData = [
+            { symbol: "AAPL", name: "Apple Inc.", price: 175.25, change: 1.25 },
+            { symbol: "MSFT", name: "Microsoft Corp.", price: 335.60, change: 0.85 },
+            { symbol: "GOOGL", name: "Alphabet Inc.", price: 142.56, change: 1.25 },
+            { symbol: "AMZN", name: "Amazon.com Inc.", price: 178.22, change: -0.75 },
+            { symbol: "TSLA", name: "Tesla Inc.", price: 248.50, change: 2.15 },
+            { symbol: "META", name: "Meta Platforms Inc.", price: 485.75, change: 0.45 },
+            { symbol: "NVDA", name: "NVIDIA Corp.", price: 875.28, change: 3.25 },
+            { symbol: "JPM", name: "JPMorgan Chase & Co.", price: 197.45, change: -0.35 }
+        ];
+
+        const availableStocks = [
+            { symbol: "GOOGL", name: "Alphabet Inc.", price: 142.56, change: 1.25 },
+            { symbol: "AMZN", name: "Amazon.com Inc.", price: 178.22, change: -0.75 },
+            { symbol: "TSLA", name: "Tesla Inc.", price: 248.50, change: 2.15 }
+        ];
+
+        // Quiz data
+        const quizData = {
+            questions: [
+                {
+                    question: "What is the recommended percentage of income to save for emergencies?",
+                    options: ["5-10%", "10-15%", "15-20%", "20-30%"],
+                    correctAnswer: 2,
+                    explanation: "Financial experts typically recommend saving 15-20% of your income for emergencies."
+                },
+                {
+                    question: "Which of these is considered a 'good' debt?",
+                    options: ["Credit card debt", "Payday loan", "Student loan", "Gambling debt"],
+                    correctAnswer: 2,
+                    explanation: "Student loans are often considered 'good' debt because they're an investment in your future earning potential."
+                },
+                {
+                    question: "What does diversification in investing mean?",
+                    options: ["Investing only in stocks", "Spreading investments across different assets", "Investing only in bonds", "Putting all money in one stock"],
+                    correctAnswer: 1,
+                    explanation: "Diversification means spreading your investments across different asset classes to reduce risk."
+                }
+            ],
+            currentQuestion: 0
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update user data on the dashboard
+            document.getElementById('user-coins').textContent = userData.coins;
+            document.getElementById('user-level').textContent = userData.level;
+            document.getElementById('user-badges').textContent = userData.badges;
+            document.getElementById('simulator-balance').textContent = userData.balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Load quiz question
+            loadQuizQuestion();
+
+            // Simulate real-time stock price updates
+            setInterval(updateStockPrices, 5000);
+
+            // Quiz functionality
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            quizOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    quizOptions.forEach(opt => opt.classList.remove('selected'));
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                });
+            });
+
+            document.getElementById('submit-quiz').addEventListener('click', function() {
+                const selectedOption = document.querySelector('.quiz-option.selected');
+                if (!selectedOption) {
+                    alert('Please select an answer');
+                    return;
+                }
+
+                const answerIndex = parseInt(selectedOption.getAttribute('data-answer'));
+                const correctAnswer = quizData.questions[quizData.currentQuestion].correctAnswer;
+
+                // Show result
+                const resultDiv = document.getElementById('quiz-result');
+                resultDiv.classList.remove('d-none');
+
+                if (answerIndex === correctAnswer) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <strong>Correct!</strong> ${quizData.questions[quizData.currentQuestion].explanation}
+                        </div>
+                    `;
+                    
+                    // Update user coins
+                    userData.coins += 100;
+                    document.getElementById('user-coins').textContent = userData.coins;
+                    
+                    // Show achievement popup
+                    showAchievement();
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <strong>Incorrect!</strong> ${quizData.questions[quizData.currentQuestion].explanation}
+                        </div>
+                    `;
+                }
+
+                // Disable options and submit button
+                quizOptions.forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (parseInt(opt.getAttribute('data-answer')) === correctAnswer) {
+                        opt.classList.add('correct');
+                    } else if (opt === selectedOption) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+                this.disabled = true;
+
+                // Move to next question after delay
+                setTimeout(() => {
+                    nextQuizQuestion();
+                }, 3000);
+            });
+
+            // Close achievement popup
+            document.getElementById('close-achievement').addEventListener('click', function() {
+                document.getElementById('achievement-popup').style.display = 'none';
+            });
+        });
+
+        function loadQuizQuestion() {
+            const question = quizData.questions[quizData.currentQuestion];
+            document.getElementById('quiz-question').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'quiz-option';
+                optionDiv.setAttribute('data-answer', index);
+                optionDiv.textContent = option;
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Reset quiz state
+            document.getElementById('quiz-result').classList.add('d-none');
+            document.getElementById('submit-quiz').disabled = false;
+
+            // Re-add event listeners to options
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            quizOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    quizOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        function nextQuizQuestion() {
+            quizData.currentQuestion = (quizData.currentQuestion + 1) % quizData.questions.length;
+            loadQuizQuestion();
+        }
+
+        function updateStockPrices() {
+            // Simulate stock price changes
+            stockData.forEach(stock => {
+                // Random change between -2% and +2%
+                const changePercent = (Math.random() * 4 - 2).toFixed(2);
+                const changeAmount = (stock.price * changePercent / 100).toFixed(2);
+                stock.price = (parseFloat(stock.price) + parseFloat(changeAmount)).toFixed(2);
+                stock.change = parseFloat(changePercent);
+            });
+
+            // Update the stock ticker
+            const stockTicker = document.getElementById('stock-ticker');
+            stockTicker.innerHTML = '';
+            
+            stockData.forEach(stock => {
+                const stockItem = document.createElement('div');
+                stockItem.className = 'stock-item';
+                stockItem.innerHTML = `
+                    <div>
+                        <div class="stock-symbol">${stock.symbol}</div>
+                        <div class="stock-name">${stock.name}</div>
+                    </div>
+                    <div>
+                        <div class="stock-price">$${stock.price}</div>
+                        <div class="stock-change ${stock.change >= 0 ? 'positive' : 'negative'}">${stock.change >= 0 ? '+' : ''}${stock.change}%</div>
+                    </div>
+                `;
+                stockTicker.appendChild(stockItem);
+            });
+        }
+
+        function showAchievement() {
+            const popup = document.getElementById('achievement-popup');
+            popup.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
